@@ -20,12 +20,18 @@ def connect_mysql():
 
     return (conn, conn.cursor())
 
-def get_name_of_tables(cur_sqlite):
-    cur_sqlite.execute("SELECT name FROM sqlite_master WHERE type='table'")
+def get_name_of_tables_mysql(cur_mysql):
+    return get_tables(cur_mysql, "select table_name from information_schema.tables where table_schema='chronojump'")
+
+def get_name_of_tables_sqlite(cur_sqlite):
+    return get_tables(cur_sqlite, "SELECT name FROM sqlite_master WHERE type='table'")
+
+def get_tables(cur, query):
+    cur.execute(query)
 
     tables = []
 
-    for table in cur_sqlite.fetchall():
+    for table in cur.fetchall():
         tables.append(table[0])
 
     return tables

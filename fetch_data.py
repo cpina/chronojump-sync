@@ -13,21 +13,11 @@ def create_sqlite_file(file_name):
 
     new_sqlite_cursor = sqlite3.connect(file_name)
 
-    table_names = dbs.get_name_of_tables(cursor)
+    table_names = dbs.get_name_of_tables_sqlite(cursor)
 
     for table_name in table_names:
         sql = dbs.get_create_table(cursor, table_name)
         new_sqlite_cursor.execute(sql)
-
-def get_name_of_tables(cur_sqlite):
-    cur_sqlite.execute("SELECT name FROM sqlite_master WHERE type='table'")
-
-    tables = []
-
-    for table in cur_sqlite.fetchall():
-        tables.append(table[0])
-
-    return tables
 
 def copy_data(cur_mysql, new_sqlite, serverPersonId, name_of_table):
     cur_mysql.execute("SELECT * FROM %s WHERE serverPersonId = %s" % (name_of_table, serverPersonId))
@@ -44,7 +34,7 @@ def populates_sqlite_file(file_name, person_id):
     (db_mysql, cur_mysql) = dbs.connect_mysql()
     (db_sqlite, cur_sqlite) = dbs.connect_sqlite()
 
-    name_of_tables = dbs.get_name_of_tables(cur_sqlite)
+    name_of_tables = dbs.get_name_of_tables_mysql(cur_mysql)
 
     new_sqlite = sqlite3.connect(file_name)
 
