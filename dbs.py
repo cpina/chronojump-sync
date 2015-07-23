@@ -29,3 +29,21 @@ def get_name_of_tables(cur_sqlite):
 def get_create_table(cur_sqlite, table_name):
     results = cur_sqlite.execute("select sql from sqlite_master where type = 'table' and name = '%s'" % table_name)
     return results.fetchall()[0][0]
+
+def tuple_to_insert(table, values):
+    insert = "INSERT INTO %s VALUES ( " % table
+    
+    cleaned_values = []
+
+    first_value = True
+    for value in values:
+        if not first_value:
+            cleaned_values.append("'" + str(value).replace("'", "\\'") + "'")
+        
+        first_value = False
+
+    insert += ",".join(cleaned_values)
+
+    insert += ")"
+    
+    return insert

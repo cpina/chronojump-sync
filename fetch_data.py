@@ -28,12 +28,38 @@ def get_name_of_tables(cur_sqlite):
 
     return tables
 
+def copy_data(cur_mysql, new_sqlite, serverPersonId, name_of_table):
+    cur_mysql.execute("SELECT * FROM %s WHERE serverPersonId = %s" % (name_of_table, serverPersonId))
+
+    for row in cur_mysql.fetchall():
+        insert = dbs.tuple_to_insert(name_of_table, row)
+        
+        print insert
+        new_sqlite.execute(insert)
+
+    new_sqlite.commit()
+
+def populates_sqlite_file(file_name):
+    (db_mysql, cur_mysql) = dbs.connect_mysql()
+    (db_sqlite, cur_sqlite) = dbs.connect_sqlite()
+
+    name_of_tables = dbs.get_name_of_tables(cur_sqlite)
+
+    new_sqlite = sqlite3.connect(file_name)
+
+    for name_of_table in name_of_tables:
+        copy_data(cur_mysql, new_sqlite, serverPersonId, name_of_table)
+
 def main():
     file_name="test.db"
-    if os.path.isfile(file_name):
-        os.remove("test.db")
 
-    create_sqlite_file("test.db")
+    if os.path.isfile(file_name):
+        os.remove(file_name)
+
+    create_sqlite_file(file_name)
+
+    populates_sqlite_file(file_name)
+
 """
     (db_mysql, cur_mysql) = dbs.connect_mysql()
     (db_sqlite, cur_sqlite) = dbs.connect_sqlite()

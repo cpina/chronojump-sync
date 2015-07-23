@@ -17,7 +17,9 @@ def main():
             insert = "INSERT INTO " + table + " VALUES( " + serverPersonId + ", "
             str_row = []
             for r in row:
-                str_row.append("'" + str(r).replace("'", "\\'") + "'")
+                r = str(r).replace("'", '')
+                str_row.append("'" + r + "'")
+                #str_row.append("'" + str(r).replace("'", "\\'") + "'")
 
             insert += ",".join(str_row)
 
