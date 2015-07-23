@@ -1,8 +1,12 @@
 import MySQLdb
 import sqlite3
 
-def connect_sqlite():
-    conn = sqlite3.connect('Chronojump/database/chronojump.db')
+def connect_sqlite(file_name = None):
+
+    if file_name is None:
+        file_name = "Chronojump/database/chronojump.db"
+
+    conn = sqlite3.connect(file_name)
 
     return (conn, conn.cursor())
 
