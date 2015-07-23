@@ -8,7 +8,7 @@ def main(sqlite_file, server_person_id):
     (db_mysql, cur_mysql) = dbs.connect_mysql()
     (db_sqlite, cur_sqlite) = dbs.connect_sqlite(sqlite_file)
 
-    sqlite_tables = dbs.get_name_of_tables(cur_sqlite)
+    sqlite_tables = dbs.get_name_of_tables_sqlite(cur_sqlite)
 
     for table in sqlite_tables:
         results = cur_sqlite.execute("SELECT * FROM " + table)

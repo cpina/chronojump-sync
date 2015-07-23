@@ -9,14 +9,14 @@ import sqlite3
 import dbs
 
 def create_sqlite_file(file_name):
-    (conn, cursor) = dbs.connect_sqlite()
+    (conn, cursor) = dbs.connect_mysql()
 
     new_sqlite_cursor = sqlite3.connect(file_name)
 
-    table_names = dbs.get_name_of_tables_sqlite(cursor)
+    table_names = dbs.get_name_of_tables_mysql(cursor)
 
     for table_name in table_names:
-        sql = dbs.get_create_table(cursor, table_name)
+        sql = dbs.get_create_table_mysql(cursor, table_name)
         new_sqlite_cursor.execute(sql)
 
 def copy_data(cur_mysql, new_sqlite, serverPersonId, name_of_table):
@@ -25,7 +25,6 @@ def copy_data(cur_mysql, new_sqlite, serverPersonId, name_of_table):
     for row in cur_mysql.fetchall():
         insert = dbs.tuple_to_insert(name_of_table, row)
 
-        print insert
         new_sqlite.execute(insert)
 
     new_sqlite.commit()

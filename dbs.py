@@ -1,8 +1,8 @@
 import MySQLdb
 import sqlite3
+import re
 
 def connect_sqlite(file_name = None):
-
     if file_name is None:
         file_name = "Chronojump/database/chronojump.db"
 
@@ -40,20 +40,30 @@ def get_create_table(cur_sqlite, table_name):
     results = cur_sqlite.execute("select sql from sqlite_master where type = 'table' and name = '%s'" % table_name)
     return results.fetchall()[0][0]
 
+def get_create_table_mysql(cur_mysql, table_name):
+    sql = "show create table " + table_name
+    cur_mysql.execute(sql)
+    create_table = cur_mysql.fetchall()[0][1]
+
+    create_table = create_table.replace('`serverPersonId` int(11) DEFAULT NULL,', '')
+
+    create_table = re.sub("ENGINE=InnoDB.*", '', create_table)
+    return create_table
+
 def tuple_to_insert(table, values):
     insert = "INSERT INTO %s VALUES ( " % table
-    
+
     cleaned_values = []
 
     first_value = True
     for value in values:
         if not first_value:
             cleaned_values.append("'" + str(value).replace("'", "\\'") + "'")
-        
+
         first_value = False
 
     insert += ",".join(cleaned_values)
 
     insert += ")"
-    
+
     return insert
