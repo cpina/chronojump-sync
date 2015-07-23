@@ -57,7 +57,6 @@ if __name__ == '__main__':
     group.add_argument("--server-person-id [PERSON-ID]", dest='server_person_id', type=int)
     group.add_argument("--group-id [GROUP_ID]", dest='group_id', type=int)
 
-
     args = parser.parse_args()
 
     main(args.sqlite_file, args.server_person_id)

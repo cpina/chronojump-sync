@@ -19,7 +19,6 @@ def main(sqlite_file, server_person_id):
             for r in row:
                 r = str(r).replace("'", '')
                 str_row.append("'" + r + "'")
-                #str_row.append("'" + str(r).replace("'", "\\'") + "'")
 
             insert += ",".join(str_row)
 
