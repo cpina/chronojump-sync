@@ -18,11 +18,11 @@ def main():
     (db_mysql, cur_mysql) = dbs.connect_mysql()
 
     # Creates tables
-    cur_sqlite.execute("SELECT sql FROM sqlite_master WHERE type='table'")
+    table_names = dbs.get_name_of_tables(cur_sqlite)
 
-    for sql_table in cur_sqlite.fetchall():
-        sql_table = add_person_id(sql_table[0])
-        print sql_table
+    for table_name in table_names:
+        sql_table = dbs.get_create_table(cur_sqlite, table_name)
+        sql_table = add_person_id(sql_table)
 
         cur_mysql.execute(sql_table)
 

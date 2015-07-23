@@ -1,0 +1,4 @@
+-Use Python3?
+-Avoid concatenating strings?
+-Pass personId on push_data.py and fetch_data.py
+-Indexes
