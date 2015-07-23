@@ -17,6 +17,9 @@ def main(sqlite_file, server_person_id):
             insert = "INSERT INTO " + table + " VALUES( " + server_person_id + ", "
             str_row = []
             for r in row:
+                # TODO: fix, handle unicode characters
+                if type(r) == unicode:
+                    r = r.encode('ascii', 'ignore')
                 r = str(r).replace("'", '')
                 str_row.append("'" + r + "'")
 
