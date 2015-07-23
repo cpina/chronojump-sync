@@ -2,9 +2,7 @@
 
 import dbs
 
-serverPersonId = 1
-
-# whitelisted_tables = []
+serverPersonId = "1"
 
 def get_name_of_tables(cur_sqlite):
     cur_sqlite.execute("SELECT name FROM sqlite_master WHERE type='table'")
@@ -25,13 +23,20 @@ def main():
     for table in sqlite_tables:
         results = cur_sqlite.execute("SELECT * FROM " + table)
 
-        insert = "INSERT INTO table "
         for row in results.fetchall():
+            insert = "INSERT INTO " + table + " VALUES( " + serverPersonId + ", "
             str_row = []
             for r in row:
-                str_row.append(str(r))
+                str_row.append("'" + str(r).replace("'", "\\'") + "'")
 
-            print ",".join(str_row)
+            insert += ",".join(str_row)
+
+            insert += ")"
+
+            print insert
+            cur_mysql.execute(insert)
+
+    db_mysql.commit()
 
 if __name__ == '__main__':
     main()
